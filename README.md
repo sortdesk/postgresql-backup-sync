@@ -17,7 +17,7 @@ services:
   pg-backup-sync:
     container_name: "pg-backup-sync"
     restart: unless-stopped
-    image: ghcr.io/sortdesk/pg-backup-sync
+    image: ghcr.io/sortdesk/postgresql-backup-sync
     volumes:
     - ./volume/backup:/backup
     environment:
