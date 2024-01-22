@@ -19,13 +19,13 @@ services:
     restart: unless-stopped
     image: ghcr.io/sortdesk/postgresql-backup-sync
     volumes:
-    - ./volume/backup:/backup
+    - pgbackup:/backup
     environment:
     - POSTGRES_USER=postgres_user
     - POSTGRES_PASSWORD=xxxxxxxxxxxxxxxxxxxxx
     - POSTGRES_DB=postgres_db
     - POSTGRES_HOST=postgres
-    - SCHEDULE="0 * * * *"
+    - SCHEDULE="0 0 * * *"
 
     # optionally configure backup retention
     # - FILES_TO_KEEP=5
@@ -38,6 +38,9 @@ services:
     # - AWS_BUCKET_NAME=pg-backup-sync
     # - AWS_ACCESS_KEY_ID=XXXXXXX
     # - AWS_SECRET_ACCESS_KEY=yyyyyyy
+
+volumes:
+  pgbackup:
 ```
 
 This expects a volume at `/backup` to store the backup files.
@@ -68,7 +71,7 @@ Define a crontab schedule when the backup task should get triggered with the `SC
 Optionally specify how many backups you want to keep by setting the `FILES_TO_KEEP` environment variable. This will both rotate local backup files and configured cloud connectors.
 
 ## Cloud Connectors
-Add one or more cloud connectors to sync your backups to external storage providers.
+Add one or more cloud connectors to sync your backups to external storage providers. Define separate buckets/containers for different deployments to avoid conflicting behavior.
 
 ### Azure Blob Storage
 Configure your connector details by setting the following environment variables:
